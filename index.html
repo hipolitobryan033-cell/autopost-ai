@@ -51,47 +51,38 @@
       font-size: 12px;
       opacity: 0.7;
     }
-  </style>
-</head>
-
-<body>
-
-  <h1>🚀 AutoPost AI</h1>
-  <p>Convierte texto en contenido listo para redes sociales</p>
-
-  <div class="box">
-    <textarea id="inputText" placeholder="Escribe tu idea aquí..."></textarea>
-    <button onclick="generar()">Generar contenido</button>
-
-    <div class="result" id="output"></div>
-  </div>
-
-  <footer>
-    © 2026 AutoPost AI – Proyecto en desarrollo
-  </footer>
-
   <script>
-    function generar() {
-      const texto = document.getElementById("inputText").value;
-      if (texto.trim() === "") {
-        alert("Escribe algo primero");
-        return;
-      }
+function generar() {
+  const texto = document.getElementById("inputText").value;
 
-      const resultado = `
-📌 DESCRIPCIÓN:
+  if (texto.trim() === "") {
+    alert("Escribe algo primero 🚀");
+    return;
+  }
+
+  const resultado = `
+📌 TikTok:
 ${texto}
+🔥 No te rindas, sigue creando
+#fyp #viral #motivacion
 
-🔥 Hashtags:
-#AutoPostAI #MarketingDigital #Emprendedores #ContenidoViral #TikTok #Instagram #Facebook #YouTube
+📸 Instagram:
+${texto}
+✨ Constancia > Talento
+#reels #crecimiento #emprender
 
-⏰ Hora recomendada:
-7:00 PM
-      `;
+📘 Facebook:
+${texto}
+💡 Comparte si te ayudó
+#emprendedores #inspiracion
 
-      document.getElementById("output").innerText = resultado;
-    }
-  </script>
+▶️ YouTube Shorts:
+${texto}
+🚀 Aprende algo nuevo hoy
+#shorts #exito #mentalidad
+⏰ Hora recomendada: 7:00 PM
+  `;
 
-</body>
-</html>
+  document.getElementById("output").innerText = resultado;
+}
+</script>
