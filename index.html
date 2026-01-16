@@ -38,6 +38,7 @@
       color: black;
       cursor: pointer;
       font-weight: bold;
+      width: 100%;
     }
     .result {
       margin-top: 20px;
@@ -46,85 +47,117 @@
       padding: 15px;
       border-radius: 10px;
       white-space: pre-line;
+      font-size: 14px;
     }
   </style>
 </head>
 
 <body>
 
-<h1>🚀 AutoPost AI</h1>
-<p>Convierte texto en contenido listo para redes sociales</p>
+  <h1>🚀 AutoPost AI</h1>
+  <p>Convierte texto en contenido listo para redes sociales</p>
 
-<div class="box">
+  <div class="box">
 
-  <select id="nicho">
-    <option value="motivacion">Motivación</option>
-    <option value="negocios">Negocios</option>
-    <option value="fitness">Fitness</option>
-    <option value="mentalidad">Mentalidad</option>
-    <option value="viral">Frases virales</option>
-  </select>
+    <select id="nicho">
+      <option value="motivacion">Motivación</option>
+      <option value="negocios">Negocios</option>
+      <option value="fitness">Fitness</option>
+      <option value="mentalidad">Mentalidad</option>
+      <option value="viral">Frases virales</option>
+    </select>
 
-  <textarea id="inputText" placeholder="Escribe tu idea aquí..."></textarea>
+    <textarea id="inputText" placeholder="Escribe tu idea aquí..."></textarea>
 
-  <button onclick="generar()">Generar contenido</button>
+    <button onclick="generar()">Generar contenido</button>
 
-  <div class="result" id="output"></div>
+    <div class="result" id="output"></div>
 
-</div>
+    <button onclick="copiarSeccion('TikTok')">📌 Copiar TikTok</button>
+    <button onclick="copiarSeccion('Instagram')">📸 Copiar Instagram</button>
+    <button onclick="copiarSeccion('Facebook')">📘 Copiar Facebook</button>
+    <button onclick="copiarSeccion('YouTube')">▶️ Copiar YouTube</button>
 
-<script>
-function generar() {
-  const tema = document.getElementById("inputText").value;
-  const nicho = document.getElementById("nicho").value;
+  </div>
 
-  if (tema.trim() === "") {
-    alert("Escribe algo primero 🚀");
-    return;
-  }
+  <script>
+    function generar() {
+      const tema = document.getElementById("inputText").value;
+      const nicho = document.getElementById("nicho").value;
 
-  let texto = "";
+      if (tema.trim() === "") {
+        alert("Escribe algo primero 🚀");
+        return;
+      }
 
-  if (nicho === "motivacion") {
-    texto = `🔥 ${tema}
+      let base = "";
 
-No esperes motivación.
-Créala.
-Disciplina > excusas.`;
-  }
+      if (nicho === "motivacion") {
+        base = `🔥 ${tema}\nNo esperes motivación.\nCréala.\nDisciplina > excusas.`;
+      }
 
-  if (nicho === "negocios") {
-    texto = `📈 ${tema}
+      if (nicho === "negocios") {
+        base = `📈 ${tema}\nMientras otros duermen,\nalguien construye su imperio.`;
+      }
 
-Mientras otros duermen,
-alguien está construyendo su imperio.`;
-  }
+      if (nicho === "fitness") {
+        base = `🏋️ ${tema}\nEl cuerpo logra\nlo que la mente decide.`;
+      }
 
-  if (nicho === "fitness") {
-    texto = `🏋️ ${tema}
+      if (nicho === "mentalidad") {
+        base = `🧠 ${tema}\nClaridad.\nSilencio.\nEnfoque.`;
+      }
 
-El cuerpo logra
-lo que la mente decide.`;
-  }
+      if (nicho === "viral") {
+        base = `✨ ${tema}\nEl problema no es el tiempo,\nes la prioridad.`;
+      }
 
-  if (nicho === "mentalidad") {
-    texto = `🧠 ${tema}
+      document.getElementById("output").innerText = `
+📌 TikTok:
+${base}
+#fyp #viral
 
-Claridad.
-Silencio.
-Enfoque.`;
-  }
+📸 Instagram:
+${base}
+✨ Guarda este post
 
-  if (nicho === "viral") {
-    texto = `✨ ${tema}
+📘 Facebook:
+${base}
+💡 Compártelo
 
-El problema no es el tiempo,
-es la prioridad.`;
-  }
+▶️ YouTube Shorts:
+${base}
+🚀 Suscríbete
 
-  document.getElementById("output").innerText = texto;
-}
-</script>
+⏰ Hora recomendada: 7:00 PM
+`;
+    }
+
+    function copiarSeccion(red) {
+      const texto = document.getElementById("output").innerText;
+
+      let inicio = "";
+      let fin = "";
+
+      if (red === "TikTok") {
+        inicio = "📌 TikTok:";
+        fin = "📸 Instagram:";
+      } else if (red === "Instagram") {
+        inicio = "📸 Instagram:";
+        fin = "📘 Facebook:";
+      } else if (red === "Facebook") {
+        inicio = "📘 Facebook:";
+        fin = "▶️ YouTube Shorts:";
+      } else if (red === "YouTube") {
+        inicio = "▶️ YouTube Shorts:";
+        fin = "⏰";
+      }
+
+      const contenido = texto.split(inicio)[1].split(fin)[0].trim();
+      navigator.clipboard.writeText(contenido);
+      alert("✅ Copiado para " + red);
+    }
+  </script>
 
 </body>
 </html>
