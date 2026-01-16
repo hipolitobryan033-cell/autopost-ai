@@ -65,6 +65,11 @@
     <textarea id="inputText" placeholder="Escribe tu idea aquí..."></textarea>
     <button onclick="generar()">Generar contenido</button>
     <div class="result" id="output"></div>
+
+    <button onclick="copiarSeccion('TikTok')">📌 Copiar TikTok</button>
+    <button onclick="copiarSeccion('Instagram')">📸 Copiar Instagram</button>
+    <button onclick="copiarSeccion('Facebook')">📘 Copiar Facebook</button>
+    <button onclick="copiarSeccion('YouTube')">▶️ Copiar YouTube</button>
   </div>
 
   <footer>
@@ -105,6 +110,31 @@ ${texto}
       `;
 
       document.getElementById("output").innerText = resultado;
+    }
+
+    function copiarSeccion(red) {
+      const texto = document.getElementById("output").innerText;
+
+      let inicio = "";
+      let fin = "";
+
+      if (red === "TikTok") {
+        inicio = "📌 TikTok:";
+        fin = "📸 Instagram:";
+      } else if (red === "Instagram") {
+        inicio = "📸 Instagram:";
+        fin = "📘 Facebook:";
+      } else if (red === "Facebook") {
+        inicio = "📘 Facebook:";
+        fin = "▶️ YouTube Shorts:";
+      } else if (red === "YouTube") {
+        inicio = "▶️ YouTube Shorts:";
+        fin = "⏰ Hora recomendada:";
+      }
+
+      const contenido = texto.split(inicio)[1].split(fin)[0].trim();
+      navigator.clipboard.writeText(contenido);
+      alert("✅ Copiado para " + red);
     }
   </script>
 
