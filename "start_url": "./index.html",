@@ -2,7 +2,9 @@
   "name": "AutoPost AI",
   "short_name": "AutoPost AI",
   "start_url": "./index.html",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#0f2027",
   "theme_color": "#0f2027",
   "icons": [
