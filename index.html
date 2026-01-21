@@ -1,124 +1,186 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AutoPost AI</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- PWA -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0f2027">
-  <link rel="icon" href="icon-192.png">
 
   <style>
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
       background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
       color: white;
-      text-align: center;
-      padding: 20px;
+      min-height: 100vh;
     }
-    .box {
-      background: rgba(0,0,0,0.4);
-      padding: 20px;
-      border-radius: 15px;
-      max-width: 500px;
+
+    .container {
+      max-width: 420px;
       margin: auto;
+      padding: 20px;
     }
-    textarea, select {
-      width: 100%;
-      padding: 10px;
-      border-radius: 10px;
-      border: none;
-      margin-bottom: 10px;
-      font-size: 16px;
+
+    h1 {
+      text-align: center;
+      margin-bottom: 5px;
     }
-    button {
-      margin-top: 10px;
-      padding: 12px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 10px;
-      background: #00ff99;
-      color: black;
-      cursor: pointer;
-      font-weight: bold;
+
+    p {
+      text-align: center;
+      opacity: 0.8;
     }
-    .result {
+
+    .card {
+      background: rgba(0,0,0,0.35);
+      border-radius: 16px;
+      padding: 20px;
       margin-top: 20px;
-      text-align: left;
+    }
+
+    select, textarea, button {
+      width: 100%;
+      margin-top: 12px;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      font-size: 16px;
+    }
+
+    textarea {
+      resize: none;
+      height: 90px;
+    }
+
+    button {
+      background: #00ff9c;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .resultado {
+      margin-top: 15px;
       background: #111;
       padding: 15px;
-      border-radius: 10px;
-      white-space: pre-line;
-      display: none;
+      border-radius: 12px;
+      white-space: pre-wrap;
+    }
+
+    .acciones button {
+      margin-top: 10px;
+    }
+
+    .modo-oscuro {
+      background: #000;
     }
   </style>
 </head>
 
 <body>
+  <div class="container">
+    <h1>🚀 AutoPost AI</h1>
+    <p>Convierte texto en contenido viral listo</p>
 
-<h1>🚀 AutoPost AI</h1>
-<p>Convierte texto en contenido listo para redes sociales</p>
+    <div class="card">
+      <select id="nicho">
+        <option value="motivacion">Motivación</option>
+        <option value="negocios">Negocios</option>
+        <option value="fitness">Fitness</option>
+        <option value="frases">Frases virales</option>
+      </select>
 
-<div class="box">
+      <textarea id="idea" placeholder="Escribe tu idea aquí..."></textarea>
 
-  <select id="nicho">
-    <option value="motivacion">Motivación</option>
-    <option value="negocios">Negocios</option>
-    <option value="fitness">Fitness</option>
-    <option value="mentalidad">Mentalidad</option>
-    <option value="viral">Frases virales</option>
-  </select>
+      <button onclick="generar()">Generar contenido</button>
 
-  <textarea id="inputText" placeholder="Escribe tu idea aquí..."></textarea>
+      <div id="resultado" class="resultado"></div>
 
-  <button onclick="generar()">Generar contenido</button>
-
-  <div class="result" id="output"></div>
-
-</div>
+      <div class="acciones">
+        <button onclick="copiar('tiktok')">📌 Copiar TikTok</button>
+        <button onclick="copiar('instagram')">📸 Copiar Instagram</button>
+        <button onclick="copiar('facebook')">📘 Copiar Facebook</button>
+        <button onclick="copiar('youtube')">▶️ Copiar YouTube</button>
+        <button onclick="modoOscuro()">🌙 Modo Oscuro</button>
+      </div>
+    </div>
+  </div>
 
 <script>
+let ultimoTexto = "";
+
+const hooks = {
+  motivacion: [
+    "🔥 Nadie te va a salvar.",
+    "⚠️ Esto duele, pero es verdad:",
+    "💭 Escucha esto con atención:",
+    "🚀 Si hoy no actúas, mañana tampoco:"
+  ],
+  negocios: [
+    "💰 Nadie habla de esto:",
+    "📉 El error que te mantiene pobre:",
+    "🧠 Mentalidad que separa ricos de pobres:"
+  ],
+  fitness: [
+    "💪 Tu cuerpo es el reflejo de tu disciplina:",
+    "🏋️ Nadie entrena por ti:",
+    "🔥 El dolor es temporal:"
+  ],
+  frases: [
+    "🧠 Reflexión rápida:",
+    "📌 Grábate esto:",
+    "⚠️ Frase que pocos entienden:"
+  ]
+};
+
+const hashtags = {
+  motivacion: "#motivacion #disciplina #exito #mentalidad",
+  negocios: "#negocios #dinero #emprender #libertadfinanciera",
+  fitness: "#fitness #gym #disciplina #habitos",
+  frases: "#frases #reflexion #sabiduria #mente"
+};
+
 function generar() {
-  const tema = document.getElementById("inputText").value;
+  const idea = document.getElementById("idea").value.trim();
   const nicho = document.getElementById("nicho").value;
 
-  if (tema.trim() === "") {
-    alert("Escribe algo primero 🚀");
+  if (!idea) {
+    alert("Escribe una idea primero 👀");
     return;
   }
 
-  let texto = "";
+  const hook = hooks[nicho][Math.floor(Math.random() * hooks[nicho].length)];
 
-  if (nicho === "motivacion") {
-    texto = `🔥 ${tema}\n\nNo esperes motivación.\nCréala.\n#motivacion #disciplina`;
-  }
+  ultimoTexto = `${hook}
 
-  if (nicho === "negocios") {
-    texto = `📈 ${tema}\n\nMientras otros duermen,\nalguien construye.\n#negocios #emprender`;
-  }
+"${idea}"
 
-  if (nicho === "fitness") {
-    texto = `🏋️ ${tema}\n\nEl cuerpo sigue a la mente.\n#fitness #disciplina`;
-  }
+No esperes motivación.
+Créala.
+${hashtags[nicho]}`;
 
-  if (nicho === "mentalidad") {
-    texto = `🧠 ${tema}\n\nEnfoque. Silencio. Acción.\n#mentalidad #exito`;
-  }
-
-  if (nicho === "viral") {
-    texto = `✨ ${tema}\n\nEl problema no es el tiempo.\n#viral #frases`;
-  }
-
-  const output = document.getElementById("output");
-  output.style.display = "block";
-  output.innerText = texto;
+  document.getElementById("resultado").innerText = ultimoTexto;
 }
 
-// Registrar Service Worker
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js');
+function copiar(red) {
+  if (!ultimoTexto) {
+    alert("Primero genera contenido 👀");
+    return;
+  }
+
+  navigator.clipboard.writeText(ultimoTexto);
+  alert("Contenido copiado para " + red.toUpperCase() + " ✅");
+}
+
+function modoOscuro() {
+  document.body.classList.toggle("modo-oscuro");
 }
 </script>
 
